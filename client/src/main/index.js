@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import '../renderer/store'
+import '../renderer/service'
 
 /**
  * Set `__static` path to static files in production
@@ -10,7 +11,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
+export const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
@@ -52,6 +53,20 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on("window:minimize", () => {
+  mainWindow.minimize();
+});
+
+ipcMain.on("window:maximize", () => {
+  mainWindow.maximize();
+});
+
+ipcMain.on("window:quit", () => {
+  if(process.platform !== 'darwin'){
+    app.quit();
+  }
+});
 
 /**
  * Auto Updater

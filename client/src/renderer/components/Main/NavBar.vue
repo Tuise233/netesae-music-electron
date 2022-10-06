@@ -22,8 +22,9 @@
     </div>
 
     <div class="app-navbar-userinfo">
-        <img src="@/assets/img/navbar/icon.png">
-        <span>拉布拉马</span>
+        <img src="@/assets/img/navbar/unlogin.png" v-if="$store.state.userInfo.username == ''">
+        <img :src="$store.state.userInfo.userAvatar" v-if="$store.state.userInfo.username != ''">
+        <span class="app-navbar-userinfo-username" @click="clickUsername">{{ $store.state.userInfo.username == '' ? '未登录' : $store.state.userInfo.username }}</span>
         <img src="@/assets/img/navbar/bottom_arrow.png">
     </div>
 
@@ -31,16 +32,55 @@
         <img src="@/assets/img/navbar/setting.png">
         <img src="@/assets/img/navbar/message.png">
         <div class="app-navbar-setting-split"></div>
-        <img src="@/assets/img/navbar/minimize.png">
-        <img src="@/assets/img/navbar/maximize.png">
-        <img src="@/assets/img/navbar/close.png">
+        <img src="@/assets/img/navbar/minimize.png" @click="clearCache">
+        <img src="@/assets/img/navbar/maximize.png" @click="maxWindow">
+        <img src="@/assets/img/navbar/close.png" @click="quitApp">
     </div>
   </div>
 </template>
 
 <script>
-export default {
+const { ipcRenderer } = require("electron");
 
+export default {
+    created() {
+
+    },
+
+    data() {
+        return {
+            userAvatar: "",
+            username: ""
+        }
+    },
+
+    methods: {
+        clearCache(){
+            this.$store.dispatch("clearCache");
+
+
+        },
+
+        miniWindow(){
+            ipcRenderer.send("window:minimize");
+        },
+
+        maxWindow(){
+            ipcRenderer.send("window:maximize");
+        },
+
+        quitApp(){
+            ipcRenderer.send("window:quit");
+        },
+        
+        clickUsername(){
+            if(this.$store.state.userInfo.username == ''){
+                ipcRenderer.send("loginDialog:open");
+            } else {
+
+            }
+        }
+    },
 }
 </script>
 
@@ -145,17 +185,24 @@ export default {
     align-items: center;
     margin-left: auto;
     margin-right: 10px;
+    -webkit-app-region: no-drag;
 }
 
-.app-navbar-userinfo img:first-child{
+.app-navbar-userinfo img{
     width: 30px;
     height: 30px;
+    border-radius: 50%;
 }
 
-.app-navbar-userinfo span{
-    color: white;
+.app-navbar-userinfo-username{
+    color: rgb(230, 228, 228);
     font-size: 12px;
     margin-left: 8px;
+    cursor: pointer;
+}
+
+.app-navbar-userinfo-username:hover{
+    color: white;
 }
 
 .app-navbar-userinfo img:nth-child(3){

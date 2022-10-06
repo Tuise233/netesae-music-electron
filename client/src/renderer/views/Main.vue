@@ -3,6 +3,8 @@
     <!-- 导航栏 -->
     <NavBar />
 
+    <span style="font-size: 10px;">{{$store.state.userInfo}}</span>
+
     <!-- 底部音乐播放栏 -->
     <MusicBar />
   </div>
