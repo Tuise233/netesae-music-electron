@@ -13,12 +13,17 @@ const defaultState = {
     userAvatar: "",
     cookie: "",
     profile: {},
-    token: ""
+    token: "",
+    account: {}
   },
 
   common: {
-    
-  }
+    activePage: "findMusic",
+
+    songList: {
+      myList: []
+    }
+  },
 };
 
 export default new Vuex.Store({
@@ -26,18 +31,15 @@ export default new Vuex.Store({
     createPersistedState(),
     createSharedMutations()
   ],
-  strict: process.env.NODE_ENV !== 'production',
+  strict: false,
 
   state: defaultState,
 
   mutations: {
-    setLoginState(self, data){
-      this.state.userInfo.isLogin = data.state;
-    },
-
     setUserInfo(self, data){
       this.state.userInfo.cookie = data.cookie;
       this.state.userInfo.profile = data.profile;
+      this.state.userInfo.account = data.account;
       this.state.userInfo.token = data.token;
       this.state.userInfo.username = data.profile.nickname;
       this.state.userInfo.userAvatar = data.profile.avatarUrl;
@@ -45,6 +47,17 @@ export default new Vuex.Store({
 
     clearCache(){
       this.replaceState(defaultState);
+    },
+
+    toggleActivePage(self, data){
+      this.state.common.activePage = data.id;
+    },
+    
+    setMyList(self, data){
+      this.state.common.songList.myList = data.myList;
+      this.state.common.songList.myList.forEach(item => {
+        item.active = false;
+      });
     }
   },
 
@@ -59,6 +72,14 @@ export default new Vuex.Store({
 
     clearCache({commit}){
       commit("clearCache");
+    },
+
+    toggleActivePage({commit}, data){
+      commit("toggleActivePage", data);
+    },
+
+    setMyList({commit}, data){
+      commit("setMyList", data);
     }
   }
 })

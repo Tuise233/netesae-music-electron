@@ -7,14 +7,14 @@ const api = axios.create({
     timeout: 60000
 });
 
+export default api;
+
 //响应拦截器
 api.interceptors.response.use(response => {
     return response;
 }, (error) => {
     return error.response;
 });
-
-
 
 
 /*** APIs */
@@ -48,6 +48,20 @@ api.logOut = async() => {
     await api.get(apiUrl + `/logout`);
 };
 
+//获取轮播图
+api.getBannerList = async() => {
+    let { data } = await api.get(apiUrl + "/banner?type=0");
+    return data;
+}
 
+//获取推荐歌单
+api.getRecommandSongList = async() => {
+    let { data } = await api.get(apiUrl + "/personalized?limit=10");
+    return data;
+}
 
-export default api;
+//获取我的歌单
+api.getMyList = async(uid) => {
+    let { data } = await api.get(apiUrl + `/user/playlist?uid=${uid}`);
+    return data;
+}

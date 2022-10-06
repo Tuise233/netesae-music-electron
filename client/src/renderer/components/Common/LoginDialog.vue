@@ -110,12 +110,13 @@ export default {
 
                         case 200:{
                             //登陆成功
-                            this.$store.dispatch("setLoginState", true);
                             this.$store.dispatch("setUserInfo", {
                                 cookie: res.cookie,
                                 profile: res.profile,
-                                token: res.token                                
+                                token: res.token,
+                                account: res.account                         
                             });
+                            this.loginSuccess();
                             break;
                         }
                     }
@@ -146,16 +147,25 @@ export default {
 
                         case 200:{
                             //登陆成功
-                            this.$store.dispatch("setLoginState", true);
                             this.$store.dispatch("setUserInfo", {
                                 cookie: res.cookie,
                                 profile: res.profile,
-                                token: res.token                                
+                                token: res.token,
+                                account: res.account                      
                             });
                             ipcRenderer.send("loginDialog:close");
+                            this.loginSuccess();
                             break;
                         }
                     }
+                });
+            });
+        },
+        
+        loginSuccess(){
+            api.getMyList(this.$store.state.userInfo.account.id).then((res) => {
+                this.$store.dispatch("setMyList", {
+                    myList: res.playlist
                 });
             });
         }
