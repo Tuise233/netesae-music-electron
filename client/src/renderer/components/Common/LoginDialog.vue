@@ -18,7 +18,7 @@
 
     <div class="app-logindialog-group" v-if="type == 'loginPwd'">
         <el-input v-model="phone" placeholder="请输入手机号" style="width: 255px;" prefix-icon="el-icon-mobile-phone"></el-input>
-        <el-input v-model="password" placeholder="请输入密码" style="width: 255px; margin-top: 10px;" prefix-icon="el-icon-key"></el-input>
+        <el-input v-model="password" placeholder="请输入密码" style="width: 255px; margin-top: 10px;" prefix-icon="el-icon-key" show-password></el-input>
         <div style="width: 255px; display: flex; margin-top: 10px;">
             <span style="margin-left: 0; margin-right: auto; color: red; font-size: 12px;">{{ tipText }}</span>
             <span style="margin-left: auto; margin-right: 0; color: rgb(12, 115, 194); cursor: pointer; font-size: 12px;" @click="toggleLoginFunc('loginCaptcha')">验证码登录</span>
@@ -153,7 +153,6 @@ export default {
                                 token: res.token,
                                 account: res.account                      
                             });
-                            ipcRenderer.send("loginDialog:close");
                             this.loginSuccess();
                             break;
                         }
@@ -163,11 +162,14 @@ export default {
         },
         
         loginSuccess(){
-            api.getMyList(this.$store.state.userInfo.account.id).then((res) => {
-                this.$store.dispatch("setMyList", {
-                    myList: res.playlist
+            setTimeout(() => {
+                api.getMyList(this.$store.state.userInfo.account.id).then((res) => {
+                    this.$store.dispatch("setMyList", {
+                        myList: res.playlist
+                    });
+                    ipcRenderer.send("loginDialog:close");
                 });
-            });
+            }, 1000);
         }
     },
 }
