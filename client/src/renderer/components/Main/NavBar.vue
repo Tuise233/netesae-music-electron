@@ -20,14 +20,14 @@
             <img src="@/assets/img/navbar/microphone.png">
         </div>
     </div>
-
+    <span style="color: white; font-size: 14px;">{{ $store.state.userInfo.account.id }}</span>
     <div class="app-navbar-userinfo">
         <img src="@/assets/img/navbar/unlogin.png" v-if="$store.state.userInfo.username == ''">
         <img :src="$store.state.userInfo.userAvatar" v-if="$store.state.userInfo.username != ''">
         <span class="app-navbar-userinfo-username" @click="clickUsername">{{ $store.state.userInfo.username == '' ? '未登录' : $store.state.userInfo.username }}</span>
         <img src="@/assets/img/navbar/bottom_arrow.png">
     </div>
-
+    
     <div class="app-navbar-setting">
         <img src="@/assets/img/navbar/setting.png">
         <img src="@/assets/img/navbar/message.png">
