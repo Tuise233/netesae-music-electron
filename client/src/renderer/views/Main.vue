@@ -48,6 +48,6 @@ export default {
 ::-webkit-scrollbar-thumb {
   width: 5px;
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgb(224, 224, 224);
 }
 </style>

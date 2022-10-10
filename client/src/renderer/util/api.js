@@ -65,3 +65,15 @@ api.getMyList = async(uid) => {
     let { data } = await api.get(apiUrl + `/user/playlist?uid=${uid}`);
     return data;
 }
+
+//获取歌单具体详情
+api.getSongListDetail = async(id) => {
+    let { data } = await api.get(apiUrl + `/playlist/track/all?id=${id}`);
+    return data;
+};
+
+//获取歌曲播放链接
+api.getSongPlayUrl = async(id) => {
+    let { data } = await api.get(apiUrl + `/song/url?id=${id}`);
+    return data;
+}
